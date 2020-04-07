@@ -44,18 +44,27 @@ class Board:
         return s
 
     def display(self, x_offset, y_offset, board_height, board_width, margin_percent):
-        
+        stroke(random(255), random(255), random(255))
+
         # draw horizontal lines
-        margin = board_height * (margin_percent / 100)
+        margin = float(board_height) * (float(margin_percent) / 100)
+        print("margin = %f" %margin)
         horizontal_line_spacing = (board_height - (2*margin)) / (self.rows)
-        for i in range(1, self.rows - 1):
+        for i in range(1, self.rows):
+            print("horizontal line %d drawn" %i)
+            print("line x start: %d, line y start: %d\n" %(x_offset + margin, y_offset + (i * horizontal_line_spacing)))
             line(x_offset + margin, y_offset + (i * horizontal_line_spacing), x_offset + (board_width - margin), y_offset + (i * horizontal_line_spacing))
         
         # draw vertical lines
-        margin = board_width * margin_percent
+        margin = float(board_width) * (float(margin_percent) / 100)
+        print("margin = %f" %margin)
         vertical_line_spacing = (board_width - (2*margin)) / (self.cols)
-        for i in range(1, self.cols - 1):
-            line(x_offset + (i*vertical_line_spacing), y_offset + margin, x_offset + (i*vertical_line_spacing), y_offset + (board_height-margin))
+        for i in range(1, self.cols):
+            print("vertical line %d drawn" %i)
+            print("line x start: %d, line y start: %d\n" %(x_offset + (i * vertical_line_spacing), y_offset + margin))
+            line(x_offset + (i * vertical_line_spacing), y_offset + margin, x_offset + (i * vertical_line_spacing), y_offset + (board_height - margin))
+        
+        print("\n\n")
         
         # base case
         if self.depth == 0:
@@ -70,8 +79,8 @@ class Board:
         else:
             for i, row in enumerate(self.spaces):
                 for j, space in enumerate(row):
-                    next_x_offset = x_offset + (board_width / self.cols)
-                    next_y_offset = y_offset + (board_height / self.rows)
+                    next_x_offset = x_offset + (j * (board_width / self.cols))
+                    next_y_offset = y_offset + (i * (board_height / self.rows))
                     next_board_width = board_width / self.cols
                     next_board_height = board_height / self.rows
                     space.display(next_x_offset, next_y_offset, next_board_height, next_board_width, margin_percent)

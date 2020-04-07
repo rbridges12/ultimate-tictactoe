@@ -11,12 +11,11 @@ def make_board(board):
                  make_board(board.get_space(i, j))
         
 def setup():
-    size(200, 200)
+    size(600, 600)
     background(255)
-    fill(0)
-    stroke(10)
-    board = Board(depth = 2)
+    strokeWeight(4)
+    board = Board(depth = 1)
     make_board(board)
     #print(board)
     
-    board.display(0, 0, height, width, 10)
+    board.display(0, 0, height, width, 5)
