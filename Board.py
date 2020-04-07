@@ -45,25 +45,32 @@ class Board:
 
     def display(self, x_offset, y_offset, board_height, board_width, margin_percent):
         stroke(random(255), random(255), random(255))
+        
+        x_margin = float(board_width) * (float(margin_percent) / 100)
+        y_margin = float(board_height) * (float(margin_percent) / 100)
 
         # draw horizontal lines
-        margin = float(board_height) * (float(margin_percent) / 100)
-        print("margin = %f" %margin)
-        horizontal_line_spacing = (board_height - (2*margin)) / (self.rows)
+        horizontal_line_spacing = (board_height - (2*y_margin)) / (self.rows)
         for i in range(1, self.rows):
-            print("horizontal line %d drawn" %i)
-            print("line x start: %d, line y start: %d\n" %(x_offset + margin, y_offset + (i * horizontal_line_spacing)))
-            line(x_offset + margin, y_offset + (i * horizontal_line_spacing), x_offset + (board_width - margin), y_offset + (i * horizontal_line_spacing))
+            x_start = x_offset + x_margin
+            x_end = x_offset + board_width - x_margin
+            y = y_offset + y_margin + (i * horizontal_line_spacing)
+            line(x_start, y, x_end, y)
+            
+            #print("horizontal line %d drawn" %i)
+            #print("line x start: %d, line y start: %d\n" % (x_start, y))
         
         # draw vertical lines
-        margin = float(board_width) * (float(margin_percent) / 100)
-        print("margin = %f" %margin)
-        vertical_line_spacing = (board_width - (2*margin)) / (self.cols)
+        vertical_line_spacing = (board_width - (2*x_margin)) / (self.cols)
         for i in range(1, self.cols):
-            print("vertical line %d drawn" %i)
-            print("line x start: %d, line y start: %d\n" %(x_offset + (i * vertical_line_spacing), y_offset + margin))
-            line(x_offset + (i * vertical_line_spacing), y_offset + margin, x_offset + (i * vertical_line_spacing), y_offset + (board_height - margin))
-        
+            x = x_offset + x_margin + (i * vertical_line_spacing)
+            y_start = y_offset + y_margin
+            y_end = y_offset + board_height - y_margin
+            line(x, y_start, x, y_end)
+            
+            #print("vertical line %d drawn" %i)
+            #print("line x start: %d, line y start: %d\n" %(x, y_start))
+
         print("\n\n")
         
         # base case
@@ -74,13 +81,14 @@ class Board:
                 for j, space in enumerate(row):
                     x = x_offset + (j * vertical_line_spacing) + (vertical_line_spacing / 2)
                     y = y_offset + (i * horizontal_line_spacing) + (horizontal_line_spacing / 2)
+                    fill(0)
                     text(space, x, y)
         
         else:
             for i, row in enumerate(self.spaces):
                 for j, space in enumerate(row):
-                    next_x_offset = x_offset + (j * (board_width / self.cols))
-                    next_y_offset = y_offset + (i * (board_height / self.rows))
-                    next_board_width = board_width / self.cols
-                    next_board_height = board_height / self.rows
+                    next_x_offset = x_offset + x_margin + (j * vertical_line_spacing)
+                    next_y_offset = y_offset + y_margin + (i * horizontal_line_spacing)
+                    next_board_width = vertical_line_spacing
+                    next_board_height = horizontal_line_spacing
                     space.display(next_x_offset, next_y_offset, next_board_height, next_board_width, margin_percent)
