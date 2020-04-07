@@ -56,9 +56,6 @@ class Board:
             x_end = x_offset + board_width - x_margin
             y = y_offset + y_margin + (i * horizontal_line_spacing)
             line(x_start, y, x_end, y)
-            
-            #print("horizontal line %d drawn" %i)
-            #print("line x start: %d, line y start: %d\n" % (x_start, y))
         
         # draw vertical lines
         vertical_line_spacing = (board_width - (2*x_margin)) / (self.cols)
@@ -67,20 +64,17 @@ class Board:
             y_start = y_offset + y_margin
             y_end = y_offset + board_height - y_margin
             line(x, y_start, x, y_end)
-            
-            #print("vertical line %d drawn" %i)
-            #print("line x start: %d, line y start: %d\n" %(x, y_start))
 
         print("\n\n")
         
         # base case
         if self.depth == 0:
             textAlign(CENTER, CENTER)
-            textSize(board_height/self.rows)
+            textSize(horizontal_line_spacing)
             for i, row in enumerate(self.spaces):
                 for j, space in enumerate(row):
-                    x = x_offset + (j * vertical_line_spacing) + (vertical_line_spacing / 2)
-                    y = y_offset + (i * horizontal_line_spacing) + (horizontal_line_spacing / 2)
+                    x = x_offset + x_margin + (j * vertical_line_spacing) + (vertical_line_spacing / 2)
+                    y = y_offset + y_margin + (i * horizontal_line_spacing) + (horizontal_line_spacing / 2)
                     fill(0)
                     text(space, x, y)
         
