@@ -42,9 +42,14 @@ class Board:
             s += "]"
         s += "]"
         return s
-
-    def display(self, x_offset, y_offset, board_height, board_width, margin_percent):
+    
+    def display(self, margin_percent, line_color):
+        self.display_helper(0, 0, height, width, margin_percent, line_color, self.depth + 1)
+    
+    def display_helper(self, x_offset, y_offset, board_height, board_width, margin_percent, line_color, stroke_weight):
         stroke(random(255), random(255), random(255))
+        #stroke(line_color)
+        strokeWeight(stroke_weight)
         
         x_margin = float(board_width) * (float(margin_percent) / 100)
         y_margin = float(board_height) * (float(margin_percent) / 100)
@@ -85,4 +90,25 @@ class Board:
                     next_y_offset = y_offset + y_margin + (i * horizontal_line_spacing)
                     next_board_width = vertical_line_spacing
                     next_board_height = horizontal_line_spacing
-                    space.display(next_x_offset, next_y_offset, next_board_height, next_board_width, margin_percent)
+                    space.display_helper(next_x_offset, next_y_offset, next_board_height, next_board_width, margin_percent, line_color, stroke_weight - 1)
+                    
+                    
+    def fill_board(self):
+        if self.get_depth() == 0:
+            self.make_base_board()
+        
+        else:
+            for i in range(self.get_rows()):
+                for j in range(self.get_cols()):
+                    self.set_space(i, j, Board(depth = self.get_depth() - 1))
+                    self.get_space(i, j).fill_board()
+                 
+    def set_spaces(self, content):
+        try:
+            for row in self.get_spaces():
+                for space in row:
+                    space.set_spaces(content)
+        except:
+            for i, row in enumerate(self.get_spaces()):
+                for j, space in enumerate(row):
+                    self.set_space(i, j, content)
